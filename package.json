@@ -1,0 +1,16 @@
+{
+  "name": "dzekcamp",
+  "version": "1.0.2",
+  "main": "index.js",
+  "bin": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "active-window": "^0.1.0",
+    "eventemitter3": "^2.0.3",
+    "robotjs": "^0.4.7"
+  },
+  "files": [
+    "index.js",
+    "src/**/*"
+  ]
+}
