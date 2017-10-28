@@ -36,8 +36,8 @@ const group = activities => {
         if (activity.isBreak) {
             result.breaks.totalTime += activity.diff;
             result.breaks.list.push({
-                from: timeFrom(activity.from),
-                to: timeFrom(activity.from + activity.diff),
+                from: timeFrom(activity.breakFrom),
+                to: timeFrom(activity.breakFrom + activity.diff),
                 time: activity.diff,
             });
             return;
@@ -62,10 +62,17 @@ const group = activities => {
     return result;
 };
 
-module.exports = (async (arg) => {
+const formatActivity = (activity) => {
+    const from = timeFrom(activity.from);
+    const to = timeFrom(activity.from + activity.diff);
+
+    return `${from} - ${to}    ${activity.app}`;
+};
+
+module.exports = (async (argTime, argOption) => {
     const date = () => (new Date()).toISOString().split('T')[0];
 
-    const name = arg === "today" ? date() : arg;
+    const name = argTime === "today" ? date() : argTime;
 
     const data = fs.readFileSync(name + ".txt").toString();
     const lines = data.split("\n").map(line => line.split("\t"));
@@ -109,6 +116,7 @@ module.exports = (async (arg) => {
             title: isBreak ? BREAK_TITLE : title,
             diff: timeDiff,
             from: Number(current[0]),
+            breakFrom: isBreak && lastActivity && lastActivity.from,
         });
     }
 
@@ -141,5 +149,9 @@ module.exports = (async (arg) => {
 
     grouped.breaks.list.forEach(data => {
         console.log(data.from, "-", data.to, "(" + secToHMS(data.time) + ")");
-    })
+    });
+
+    if (argOption === "activities") {
+        activities.forEach(a => !a.isBreak && console.log(formatActivity(a)));
+    }
 });
