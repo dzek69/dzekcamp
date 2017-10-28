@@ -152,6 +152,10 @@ module.exports = (async (argTime, argOption) => {
     });
 
     if (argOption === "activities") {
+        console.log();
+        console.log("----------------");
+        console.log();
+        console.log("Wszystkie aktywności:");
         activities.forEach(a => !a.isBreak && console.log(formatActivity(a)));
     }
 });
